@@ -1,0 +1,71 @@
+CREATE TABLE SalesPerson( SalesPersonNumber INT, SalesPersonName VARCHAR(20), CommPercentage INT, YearHire INT, OfficeNumber INT);
+CREATE TABLE Customer( CustomerNumber INT, CustomerName VARCHAR(20), SalesPersonNumber INT, HeadQuarterCity VARCHAR(20));
+CREATE TABLE CustomerEmployee( CustomerNumber INT, EmployeeNumber INT, EmployeeName VARCHAR(20), Title VARCHAR(20));
+CREATE TABLE Product( ProductNumber INT, ProductName VARCHAR(20), UnitPrice INT);
+CREATE TABLE Sales( SalesPersonNumber INT, ProductNumber INT, Quantity INT);
+CREATE TABLE Office( OfficeNumber INT, Telephone CHAR(10), Size1 INT);
+
+
+SELECT CommPercentage, YearHire FROM SalesPerson
+WHERE salespersonnumber=186;
+
+SELECT SalesPersonNumber, SalesPersonName FROM salesperson
+WHERE commpercentage=10;
+
+SELECT SalesPersonNumber, SalesPersonName FROM salesperson;
+
+SELECT SalesPersonNumber, SalesPersonName, commpercentage FROM salesperson
+WHERE commpercentage < 12;
+
+SELECT CustomerNumber, HeadQuarterCity FROM customer
+WHERE customernumber >= 1700;
+
+SELECT CustomerNumber, CustomerName, HeadQuarterCity FROM customer
+WHERE headquartercity='New York' AND customernumber > 1500;
+
+SELECT CustomerNumber, CustomerName, HeadQuarterCity FROM customer
+WHERE headquartercity='New York' OR customernumber > 1500;
+
+SELECT CustomerNumber, CustomerName, HeadQuarterCity FROM customer
+WHERE headquartercity='New York' OR (customernumber > 1500 AND headquartercity='Atlanta');
+
+SELECT DISTINCT HeadQuarterCity FROM customer;
+
+SELECT CustomerNumber, CustomerName, HeadQuarterCity FROM customer
+WHERE customernumber>1000
+ORDER BY headquartercity ASC;
+
+SELECT AVG(Quantity) FROM sales
+WHERE salespersonnumber=127
+GROUP BY productnumber;
+
+SELECT ProductNumber, Quantity FROM sales
+WHERE salespersonnumber=137;
+
+SELECT MAX(Quantity) FROM sales
+WHERE productnumber=21765;
+
+SELECT SalesPersonNumber, SUM(Quantity) FROM sales
+GROUP BY salespersonnumber;
+
+SELECT COUNT(DISTINCT SalesPersonNumber) FROM sales
+WHERE productnumber=21765;
+
+SELECT SalesPersonNumber, SUM(Quantity) FROM sales
+GROUP BY salespersonnumber
+HAVING salespersonnumber>=150;
+
+SELECT SalesPersonNumber, SUM(Quantity) FROM sales
+GROUP BY salespersonnumber
+HAVING salespersonnumber>=150 AND SUM(Quantity)>=5000;
+
+SELECT SalesPersonName FROM customer, salesperson
+WHERE customer.salespersonnumber= salesperson.salespersonnumber AND customer.customernumber=1525;
+
+SELECT productname FROM salesperson, sales, product
+WHERE salesperson.salespersonname='Harry' AND sales.salespersonnumber=salesperson.salespersonnumber AND product.productnumber=sales.productnumber AND sales.quantity>2000;
+
+SELECT salesperson.salespersonnumber FROM salesperson
+WHERE commpercentage=(SELECT MIN(commpercentage) FROM salesperson WHERE salespersonnumber>200) AND salespersonnumber>200;
+
+COMMIT;
